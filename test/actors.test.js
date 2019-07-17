@@ -34,4 +34,22 @@ describe('actor routes', () => {
         });
       });
   });
+
+  it('can GET actors', async() => {
+    const dob = new Date();
+    const actors = await Actor.create([
+      { name: 'Warner Bros', dob, pob: 'hollywood' },
+      { name: 'Erin', dob, pob: 'kansas' },
+      { name: 'Lance', dob, pob: 'seattle' }
+    ]);
+
+    return request(app)
+      .get('/api/v1/actors')
+      .then(res => {
+        const actorsJSON = JSON.parse(JSON.stringify(actors));
+        actorsJSON.forEach(actor => {
+          expect(res.body).toContainEqual(actor);
+        });
+      });
+  });
 });
