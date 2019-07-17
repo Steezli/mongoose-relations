@@ -23,7 +23,7 @@ describe('studio routes', () => {
     return request(app)
       .post('/api/v1/studios')
       .send({ name: 'Warner Bros', address: { city: 'portland', state: 'oregon', country: 'US' } })
-      .then(res => () => {
+      .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Warner Bros',
