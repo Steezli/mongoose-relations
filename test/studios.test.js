@@ -52,4 +52,24 @@ describe('studio routes', () => {
         });
       });
   });
+  it('can GET a studio by id', async() => {
+    const studio = await Studio.create({
+      name: 'Warner bros',
+      address: { 
+        city: 'portland',
+        state: 'oregon',
+        country: 'US'
+      }
+    });
+
+    return request(app)
+      .get(`/api/v1/studios/${studio._id}`)
+      .then(res => {
+        const studioJSON = JSON.parse(JSON.stringify(studio));
+        expect(res.body).toEqual({
+          ...studioJSON,
+          name: 'Warner bros'
+        });
+      });
+  });
 });
