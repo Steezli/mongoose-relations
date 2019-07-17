@@ -36,4 +36,20 @@ describe('studio routes', () => {
         });
       });
   });
+  it('can GET studios', async() => {
+    const studios = await Studio.create([
+      { name: 'Warner Bros', address: { city: 'portland', state: 'oregon', country: 'US' } },
+      { name: 'Erin', address: { city: 'portland', state: 'oregon', country: 'US' } },
+      { name: 'Lance', address: { city: 'portland', state: 'oregon', country: 'US' } }
+    ]);
+
+    return request(app)
+      .get('/api/v1/studios')
+      .then(res => {
+        const studiosJSON = JSON.parse(JSON.stringify(studios));
+        studiosJSON.forEach(studio => {
+          expect(res.body).toContainEqual(studio);
+        });
+      });
+  });
 });
