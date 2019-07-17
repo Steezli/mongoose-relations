@@ -70,4 +70,23 @@ describe('actor routes', () => {
         });
       });
   });
+  it('can update using PUT', async() => {
+    const dob = new Date();
+    const actor = await Actor.create({
+      name: 'willem',
+      dob,
+      pob: 'portland'
+    });
+
+    return request(app)
+      .put(`/api/v1/actors/${actor._id}`)
+      .send({ name: 'Willem lost', dob, pob: 'portland' })
+      .then(res => {
+        const actorJSON = JSON.parse(JSON.stringify(actor));
+        expect(res.body).toEqual({
+          ...actorJSON,
+          name: 'Willem lost'
+        });
+      });
+  });
 });
