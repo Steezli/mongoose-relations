@@ -22,7 +22,6 @@ describe('app routes', () => {
   beforeEach(async() => {
     studio = JSON.parse(JSON.stringify(await Studio.create({ name: 'disney' })));
     actor = JSON.parse(JSON.stringify(await Actor.create({ name: 'robin williams' })));
-
   });
 
   afterAll(() => {
