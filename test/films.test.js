@@ -55,7 +55,6 @@ describe('app routes', () => {
       { title: 'Creed', studio: studio._id, released: 1993, cast: [{ role: '', actor: actor._id }]  },
       { title: 'Lion King', studio: studio._id, released: 1994, cast: [{ role: '', actor: actor._id }]  }
     ]);
-    console.log(films);
 
     return request(app)
       .get('/api/v1/films')
