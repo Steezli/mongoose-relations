@@ -4,12 +4,12 @@ const request = require('supertest');
 const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
-// const Reviewer = require('../lib/models/Reviewer');
+const Reviewer = require('../lib/models/Reviewer');
 // const Actor = require('../lib/models/Actor');
 // const Film = require('../lib/models/Film');
 // const Studio = require('../lib/models/Studio');
 
-describe('actor routes', () => {
+describe('reviewer routes', () => {
   beforeAll(() => {
     connect();
   });
@@ -32,6 +32,22 @@ describe('actor routes', () => {
           name: 'Eli',
           company: 'ACL',
           __v: 0
+        });
+      });
+  });
+  it('can GET reviewers', async() => {
+    const reviewers = await Reviewer.create([
+      { name: 'Eli', company: 'ACL' },
+      { name: 'Erin', company: 'ACL' },
+      { name: 'Lance', company: 'ACL' }
+    ]);
+      
+    return request(app)
+      .get('/api/v1/reviewers')
+      .then(res => {
+        const reviewersJSON = JSON.parse(JSON.stringify(reviewers));
+        reviewersJSON.forEach(reviewer => {
+          expect(res.body).toContainEqual(reviewer);
         });
       });
   });
