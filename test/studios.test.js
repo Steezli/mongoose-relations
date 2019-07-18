@@ -76,7 +76,7 @@ describe('studio routes', () => {
           ...studioJSON,
           name: 'Warner bros',
           films: [film]
-        });
+        }); 
       });
   });
 });
