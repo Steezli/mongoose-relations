@@ -71,11 +71,15 @@ describe('studio routes', () => {
     return request(app)
       .get(`/api/v1/studios/${studio._id}`)
       .then(res => {
-        const studioJSON = JSON.parse(JSON.stringify(studio));
         expect(res.body).toEqual({
-          ...studioJSON,
+          _id: expect.any(String),
+          address: { 
+            city: 'portland',
+            state: 'oregon',
+            country: 'US'
+          }, 
           name: 'Warner bros',
-          films: [film]
+          films: [{ _id: expect.any(String), title: film.title }]
         }); 
       });
   });
