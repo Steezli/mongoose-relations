@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const Studio = require('../lib/models/Studio');
 const Film = require('../lib/models/Film');
 const Actor = require('../lib/models/Actor');
+const Review = require('../lib/models/Review');
+const Reviewer = require('../lib/models/Reviewer');
 
 describe('app routes', () => {
   beforeAll(() => {
@@ -19,9 +21,15 @@ describe('app routes', () => {
 
   let studio = null;
   let actor = null;
+  let film = null;
+  let review = null;
+  let reviewer = null;
   beforeEach(async() => {
     studio = JSON.parse(JSON.stringify(await Studio.create({ name: 'disney' })));
     actor = JSON.parse(JSON.stringify(await Actor.create({ name: 'robin williams' })));
+    film = await Film.create({ title: 'Aladdin', studio: studio._id, released: 1992, cast: [{ actor: actor._id }] });
+    reviewer = JSON.parse(JSON.stringify(await Reviewer.create({ name: 'erin', company: 'you' })));
+    review = JSON.parse(JSON.stringify(await Review.create({ rating: 4, reviewer: reviewer._id, review: 'robin williams', film: film._id })));
   });
 
   afterAll(() => {
@@ -61,6 +69,22 @@ describe('app routes', () => {
         const filmsJSON = JSON.parse(JSON.stringify(films));
         filmsJSON.forEach(film => {
           expect(res.body).toContainEqual(film);
+        });
+      });
+  });
+  it('can GET a film by id', async() => {
+    return request(app)
+      .get(`/api/v1/films/${film._id}`)
+      .then(res => {
+        const filmJSON = JSON.parse(JSON.stringify(film));
+        expect(res.body).toEqual({
+          ...filmJSON,
+          _id: expect.any(String),
+          title: 'Aladdin',
+          studio: studio,
+          cast: [{ _id: expect.any(String), actor: { _id: expect.any(String), name: 'robin williams', __v: 0 } }],
+          reviews: [review],
+          __v: 0
         });
       });
   });
