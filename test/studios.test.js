@@ -79,12 +79,20 @@ describe('studio routes', () => {
         }); 
       });
   });
-  it('can DELETE a studio', async() => {
+  it('can DELETE a actor', async() => {
+    const studio = await Studio.create({ name: 'Bros', address: { city: 'portland', state: 'oregon', country: 'US' } });
     return request(app)
       .delete(`/api/v1/studios/${studio._id}`)
       .then(res => {
         const studioJSON = JSON.parse(JSON.stringify(studio));
         expect(res.body).toEqual(studioJSON);
+      });
+  });
+  it('cannot DELETE a studio if in a film, instead return a message', async() => {
+    return request(app)
+      .delete(`/api/v1/studios/${studio._id}`)
+      .then(res => {
+        expect(res.body).toEqual({ message: 'Could not delete because the studio has produced at least one film.' });
       });
   });
 });
