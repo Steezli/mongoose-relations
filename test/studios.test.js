@@ -79,4 +79,12 @@ describe('studio routes', () => {
         }); 
       });
   });
+  it('can DELETE a studio', async() => {
+    return request(app)
+      .delete(`/api/v1/studios/${studio._id}`)
+      .then(res => {
+        const studioJSON = JSON.parse(JSON.stringify(studio));
+        expect(res.body).toEqual(studioJSON);
+      });
+  });
 });
