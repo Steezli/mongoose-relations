@@ -54,9 +54,9 @@ describe('review routes', () => {
   });
   it('can GET reviews', async() => { 
     const reviews = await Review.create([
-      { reviewer: reviewer._id, rating: 4, review: 'Aladdin was good.', film: film._id },
-      { reviewer: reviewer._id, rating: 3, review: 'Your mom was good.', film: film._id },
-      { reviewer: reviewer._id, rating: 5, review: 'applesauce is tasty.', film: film._id }
+      { reviewer: reviewer._id, rating: 4, review: 'Aladdin was good.', film: { _id: film._id, title: film.title } },
+      { reviewer: reviewer._id, rating: 3, review: 'Your mom was good.', film: { _id: film._id, title: film.title } },
+      { reviewer: reviewer._id, rating: 5, review: 'applesauce is tasty.', film: { _id: film._id, title: film.title } }
     ]);
 
     return request(app)
@@ -65,7 +65,7 @@ describe('review routes', () => {
         const reviewsJSON = JSON.parse(JSON.stringify(reviews));
         reviewsJSON.forEach(() => {
           expect(res.body).toContainEqual(
-            { reviewer: expect.any(String), rating: 4, review: 'Aladdin was good.', film: (film._id, film.name) },
+            { _id: expect.any(String), rating: 4, review: 'Aladdin was good.', film: { _id: expect.any(String), title: film.title } }
           );
         });
       });
