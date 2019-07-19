@@ -63,8 +63,10 @@ describe('review routes', () => {
       .get('/api/v1/reviews')
       .then(res => {
         const reviewsJSON = JSON.parse(JSON.stringify(reviews));
-        reviewsJSON.forEach(review => {
-          expect(res.body).toContainEqual(review);
+        reviewsJSON.forEach(() => {
+          expect(res.body).toContainEqual(
+            { reviewer: expect.any(String), rating: 4, review: 'Aladdin was good.', film: (film._id, film.name) },
+          );
         });
       });
   });
