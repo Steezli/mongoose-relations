@@ -68,4 +68,20 @@ describe('review routes', () => {
         });
       });
   });
+  it('can GET up to 100 reviews', async() => { 
+    await Promise.all([...Array(101)].map((review, i) => {
+      return Review.create({
+        rating: 2,
+        reviewer: reviewer._id,
+        review: `woopde doda ${i}`,
+        film: film._id
+      });
+    }));
+
+    return request(app)
+      .get('/api/v1/reviews')
+      .then(res => {
+        expect(res.body).toHaveLength(100);
+      });
+  });
 });
