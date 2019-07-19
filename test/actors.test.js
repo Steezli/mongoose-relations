@@ -99,4 +99,20 @@ describe('actor routes', () => {
         });
       });
   });
+  it('can DELETE a actor', async() => {
+    const actor = await Actor.create({ name: 'Ryan Mehta', dob: '04-03-1992', pob: 'here' });
+    return request(app)
+      .delete(`/api/v1/actors/${actor._id}`)
+      .then(res => {
+        const actorJSON = JSON.parse(JSON.stringify(actor));
+        expect(res.body).toEqual(actorJSON);
+      });
+  });
+  it('cannot DELETE a actor if in a film, instead return a message', async() => {
+    return request(app)
+      .delete(`/api/v1/actors/${actor._id}`)
+      .then(res => {
+        expect(res.body).toEqual({ message: 'Could not delete because the actor is in at least one film.' });
+      });
+  });
 });
