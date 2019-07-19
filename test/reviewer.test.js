@@ -79,10 +79,22 @@ describe('reviewer routes', () => {
             review: 'robin williams',
             film: {
               _id: expect.any(String),
-              title: 'Aladdi'
+              title: 'Aladdin'
             },
             __v: 0 }],
           __v: 0
+        });
+      });
+  });
+  it('can update using PUT', async() => {
+    return request(app)
+      .put(`/api/v1/reviewers/${reviewer._id}`)
+      .send({ name: 'erin gurley', company: 'you' })
+      .then(res => {
+        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
+        expect(res.body).toEqual({
+          ...reviewerJSON,
+          name: 'erin gurley'
         });
       });
   });
