@@ -67,8 +67,8 @@ describe('app routes', () => {
       .get('/api/v1/films')
       .then(res => {
         const filmsJSON = JSON.parse(JSON.stringify(films));
-        filmsJSON.forEach(film => {
-          expect(res.body).toContainEqual(film);
+        filmsJSON.forEach(() => {
+          expect(res.body).toContainEqual({ _id: expect.any(String), title: 'aladdin', released: 1992, studio: { _id: expect.any(String), name: studio.name } });
         });
       });
   });
