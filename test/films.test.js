@@ -68,7 +68,7 @@ describe('app routes', () => {
       .then(res => {
         const filmsJSON = JSON.parse(JSON.stringify(films));
         filmsJSON.forEach(() => {
-          expect(res.body).toContainEqual({ _id: expect.any(String), title: 'aladdin', released: 1992, studio: { _id: expect.any(String), name: studio.name } });
+          expect(res.body).toContainEqual({ _id: expect.any(String), title: film.title, released: film.released, studio: { _id: expect.any(String), name: studio.name } });
         });
       });
   });
@@ -76,15 +76,20 @@ describe('app routes', () => {
     return request(app)
       .get(`/api/v1/films/${film._id}`)
       .then(res => {
-        const filmJSON = JSON.parse(JSON.stringify(film));
+        // const filmJSON = JSON.parse(JSON.stringify(film));
         expect(res.body).toEqual({
-          ...filmJSON,
-          _id: expect.any(String),
-          title: 'Aladdin',
-          studio: studio,
-          cast: [{ _id: expect.any(String), actor: { _id: expect.any(String), name: 'robin williams', __v: 0 } }],
-          reviews: [review],
-          __v: 0
+          title: film.title,
+          released: film.released,
+          studio: { _id: expect.any(String), name: studio.name },
+          cast: [{ _id: expect.any(String), actor: { _id: expect.any(String), name: actor.name } }],
+          reviews: [{ 
+            _id: expect.any(String), 
+            rating: review.rating, 
+            review: review.review,
+            reviewer: { 
+              _id: expect.any(String), 
+              name: reviewer.name } 
+          }]
         });
       });
   });
