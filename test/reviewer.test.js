@@ -23,12 +23,13 @@ describe('reviewer routes', () => {
   let actor = null;
   let film = null;
   let reviewer = null;
+  let review = null;
   beforeEach(async() => {
     studio = JSON.parse(JSON.stringify(await Studio.create({ name: 'disney' })));
     actor = JSON.parse(JSON.stringify(await Actor.create({ name: 'robin williams' })));
     film = await Film.create({ title: 'Aladdin', studio: studio._id, released: 1992, cast: [{ actor: actor._id }] });
     reviewer = JSON.parse(JSON.stringify(await Reviewer.create({ name: 'erin', company: 'you' })));
-    await Review.create({ rating: 4, reviewer: reviewer._id, review: 'robin williams', film: film._id });
+    review = await Review.create({ rating: 4, reviewer: reviewer._id, review: 'robin williams', film: film._id });
   });
 
   afterAll(() => {
@@ -68,21 +69,18 @@ describe('reviewer routes', () => {
     return request(app)
       .get(`/api/v1/reviewers/${reviewer._id}`)
       .then(res => {
-        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
         expect(res.body).toEqual({
-          ...reviewerJSON,
           _id: expect.any(String),
-          name: 'erin',
-          company: 'you',
+          name: reviewer.name,
+          company: reviewer.company,
           reviews: [{ _id: expect.any(String),
-            rating: 4,
-            review: 'robin williams',
+            rating: review.rating,
+            review: review.review,
             film: {
               _id: expect.any(String),
-              title: 'Aladdin'
-            },
-            __v: 0 }],
-          __v: 0
+              title: film.title
+            }
+          }]
         });
       });
   });

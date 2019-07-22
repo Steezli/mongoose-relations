@@ -72,11 +72,14 @@ describe('actor routes', () => {
     return request(app)
       .get(`/api/v1/actors/${actor._id}`)
       .then(res => {
-        const actorJSON = JSON.parse(JSON.stringify(actor));
         expect(res.body).toEqual({
-          ...actorJSON,
-          name: 'Willem',
-          films: [film]
+          name: actor.name,
+          dob: expect.any(String),
+          pob: actor.pob,
+          films: [{ _id: expect.any(String),
+            title: film.title, 
+            released: film.released
+          }]
         });
       });
   });
